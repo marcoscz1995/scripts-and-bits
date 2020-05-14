@@ -1,51 +1,44 @@
-from math import radians, cos, sin, asin, sqrt
-import numpy as np
-import pandas as pd
-from numpy import genfromtxt
+ #!/usr/bin/env python
+import os
+from evdev import InputDevice, categorize, ecodes
+keyboard = InputDevice('/dev/input/event12')
+mouse = InputDevice('/dev/input/event8')
+#dev.grab()
 
-df = pd.read_csv("geo_data_temp.csv")
-df = df[['id', 'lat', 'long']]
-
-#import the data as np arrays
-df = df.to_numpy()
-lat = df[:,1]
-lon = df[:,2]
-isd_cluster = np.zeros((45357,),dtype=int)
-isd_cluster-=1
-df = np.concatenate((df,isd_cluster[:,None]), axis=1)
-
-def haversine(lon1, lat1, lon2, lat2):
-    """
-    Calculate the great circle distance between two points
-    on the earth (specified in decimal degrees)
-    """
-    # convert decimal degrees to radians
-    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
-    # haversine formula
-    dlon = lon2 - lon1
-    dlat = lat2 - lat1
-    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
-    c = 2 * asin(sqrt(a))
-    # Radius of earth in kilometers is 6371
-    km = 6371* c
-    return km
-
-
-def geo_dist(df):
-    reference_point = 0
-    for i in list(range(reference_point,np.size(lat))):
-        if df[reference_point,3]==-1:#has not been assigned a cluster yet
-              iterator_list = list(range(reference_point,np.size(lat)))
-              for j in iterator_list:
-                  dist_to_reference = haversine(df[reference_point,2], df[reference_point,1], df[j,2], df[j,1])
-                  if dist_to_reference<100:#less than 100km
-                      df[j,3] = reference_point#else its left as -1
-              reference_point = np.argmin(df[:,3]) #reference point becomes next zero value
-              print(reference_point)
-    return df
-
-#import pdb; pdb.set_trace()
-df = geo_dist(df)
-
-#np.savetxt('struct_array.csv', df, delimiter=',', fmt=['%s' , '%f', '%f'], header='id,lat,lon', comments='')
+for event in keyboard.read_loop():
+  if event.type == ecodes.EV_KEY:
+      key = categorize(event)
+      if key.keystate == key.key_down:
+          if key.keycode == 'KEY_DOT': #key 52 is page down
+              os.system('xdotool key Page_Down && xdotool key Return')
+          if key.keycode == 'KEY_L': #key 39 is page up
+              os.system('xdotool key Page_Up && xdotool key Return')
+          if key.keycode == 'KEY_COMMA': #is go to tab ot the left
+              os.system('xdotool key ctrl+Prior && xdotool key Return')
+          if key.keycode == 'KEY_SLASH': #key 53 is go to tab to the right
+              os.system('xdotool key ctrl+Next && xdotool key Return')
+          if key.keycode == 'KEY_LEFT': #left arrow to go back a page
+               os.system('xdotool key Alt_R+Left')
+          if key.keycode == 'KEY_RIGHT': #right arrow to go forward a page
+               os.system('xdotool key Alt_R+Right')
+# =============================================================================
+#           if key.keycode == 'KEY_UP': #up arrow
+#               os.system('xdotool key Up')
+#           if key.keycode == 'KEY_DOWN': #down arrow
+#               os.system('xdotool key Down')
+# =============================================================================
+          if key.keycode == 'KEY_ENTER': #  
+              os.system('xdotool key Return && xdotool key Return')
+          if key.keycode == 'KEY_RIGHTALT': #  
+              os.system('xdotool key Alt_R && xdotool key Return')
+          if key.keycode == 'KEY_K': #  close window
+              os.system('xdotool key W')
+          if key.keycode == 'KEY_RIGHTSHIFT': #  
+              os.system('xdotool key Alt_R+Left')
+          if key.keycode == 'KEY_RIGHTSHIFT': #  
+              os.system('xdotool key Alt_R+Left')
+          if key.keycode == 'KEY_SPACE': #  
+              os.system('xdotool click 1')
+          if key.keycode == 'KEY_M': #  
+              os.system('xdotool click 3')
 
