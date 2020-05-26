@@ -22,3 +22,6 @@ for event in keyboard.read_loop():
                os.system('xdotool key ctrl+F4')
           if key.keycode == 'KEY_KPDOT': #open link in tab in chrome
                os.system('/home/cos/Documents/coding/scripts-and-bits/crowdmarker')
+          if key.keycode == 'KEY_BACKSPACE': #open link in tab in chrome
+               os.system('/home/cos/Documents/coding/scripts-and-bits/open_link_new_tab')
+
