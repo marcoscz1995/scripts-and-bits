@@ -1,0 +1,4 @@
+#!/bin/bash
+xdotool click 3 #click the right mouse button
+xdotool key T #open new tab
+xdotool key Alt_R+Right  #move to that new tab (which is always to the right of current tab)    

@@ -1,0 +1,5 @@
+#!/bin/bash
+xdotool key 5 #click 5 for the score
+xdotool key Return 
+xdotool key Return
+
